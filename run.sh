@@ -12,6 +12,7 @@ echo "1. Iran"
 echo "2. Kharej"
 echo "3. uninstall"
 echo "4. hawshemi Linux Optimizer"
+echo "5. Gost IP6 Script"
 # Prompt user for IP addresses
 read -p "Select number : " choices
 if [ "$choices" -eq 1 ]; then
@@ -47,12 +48,6 @@ sysctl -p
 '
   sleep 0.5
   echo "$rctext" > /etc/rc.local
-  read -p "do you want to install X-Ui for tunnling?(y/n) :" yes_no
-  echo    # move to a new line
-
-  if [[ $yes_no =~ ^[Yy]$ ]] || [[ $yes_no =~ ^[Yy]es$ ]]; then
-    bash <(curl -Ls https://raw.githubusercontent.com/alireza0/x-ui/master/install.sh)
-  fi
 elif [ "$choices" -eq 2 ]; then
   cp /etc/rc.local /root/rc.local.old
   ipv4_address=$(curl -s https://api.ipify.org)
@@ -100,6 +95,8 @@ elif [ "$choices" -eq 3 ]; then
 elif [ "$choices" -eq 4 ]; then
   sudo apt install -y sudo wget
   wget "https://raw.githubusercontent.com/hawshemi/Linux-Optimizer/main/linux-optimizer.sh" -O linux-optimizer.sh && chmod +x linux-optimizer.sh && bash linux-optimizer.sh 
+elif [ "$choices" -eq 5 ]; then
+  bash <(curl -Ls https://github.com/masoudgb/Gost-ip6/raw/v2.1.7/Gost.sh)
 else
   echo "wrong input"
   exit 1
