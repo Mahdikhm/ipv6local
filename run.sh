@@ -12,7 +12,7 @@ echo "1. Iran"
 echo "2. Kharej"
 echo "3. uninstall"
 echo "4. hawshemi Linux Optimizer"
-echo "5. Gost IP6 Script"
+echo "5. X-UI Sanai"
 # Prompt user for IP addresses
 read -p "Select number : " choices
 if [ "$choices" -eq 1 ]; then
@@ -96,7 +96,7 @@ elif [ "$choices" -eq 4 ]; then
   sudo apt install -y sudo wget
   wget "https://raw.githubusercontent.com/hawshemi/Linux-Optimizer/main/linux-optimizer.sh" -O linux-optimizer.sh && chmod +x linux-optimizer.sh && bash linux-optimizer.sh 
 elif [ "$choices" -eq 5 ]; then
-  bash <(curl -Ls https://github.com/masoudgb/Gost-ip6/raw/v2.1.7/Gost.sh)
+  bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
 else
   echo "wrong input"
   exit 1
