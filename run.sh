@@ -110,5 +110,7 @@ if [[ "$choices" -eq 1 || "$choices" -eq 2 ]]; then
   if [ "$choices" -eq 2 ]; then
   echo "Local IPv6 Kharej: 2001:470:1f10:e1f::2"
   echo "Local Ipv6 Iran: 2001:470:1f10:e1f::1"
+  echo "Local IPv4 Kharej 172.16.1.2"
+  echo "Local IPv4 Iran 172.16.1.1"
   fi
 fi
