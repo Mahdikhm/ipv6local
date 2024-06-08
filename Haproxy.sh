@@ -46,18 +46,38 @@ add_ip_and_ports() {
 }
 
 clear_configs() {
+    echo "Creating a backup of the HAProxy configuration..."
     cp $config_file $backup_file
+
+    if [ $? -ne 0 ]; then
+        echo "Failed to create a backup. Aborting."
+        return
+    fi
+
     echo "Clearing IP and port configurations from HAProxy configuration..."
 
-    # Remove IP and port configurations
-    sed -i '/frontend frontend_/d' $config_file
-    sed -i '/backend backend_/d' $config_file
+    # Use awk to remove the frontend and backend configurations
+    awk '
+    /^frontend frontend_/ {skip = 1}
+    /^backend backend_/ {skip = 1}
+    skip {if (/^$/) {skip = 0}; next}
+    {print}
+    ' $backup_file > $config_file
 
     echo "Clearing IP and port configurations from $config_file."
-    echo "Stoping HAProxy service..."
+    
+    echo "Stopping HAProxy service..."
     service haproxy stop
-    echo "Done !"
+    
+    if [ $? -eq 0 ]; then
+        echo "HAProxy service stopped."
+    else
+        echo "Failed to stop HAProxy service."
+    fi
+
+    echo "Done!"
 }
+
 
 remove_haproxy() {
     echo "Removing HAProxy..."
