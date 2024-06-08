@@ -10,7 +10,7 @@ show_menu() {
   echo "1) Iran"
   echo "2) Kharej"
   echo "3) Uninstall"
-  echo "9) Exit"
+  echo "9) Back"
 }
 
 while true; do
