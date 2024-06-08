@@ -1,7 +1,7 @@
 #!/bin/bash
 
 config_file="/etc/haproxy/haproxy.cfg"
-
+backup_file="/etc/haproxy/haproxy.cfg.bak"
 install_haproxy() {
     echo "Installing HAProxy..."
     sudo apt-get update
@@ -46,6 +46,7 @@ add_ip_and_ports() {
 }
 
 clear_configs() {
+    cp $config_file $backup_file
     echo "Clearing IP and port configurations from HAProxy configuration..."
 
     # Remove IP and port configurations
