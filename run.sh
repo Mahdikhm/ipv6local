@@ -11,7 +11,7 @@ apt install iptables -y
 echo "1. Iran"
 echo "2. Kharej"
 echo "3. uninstall"
-echo "4. hawshemi Linux Optimizer"
+echo "4. Haproxy"
 echo "5. X-UI Sanai"
 # Prompt user for IP addresses
 read -p "Select number : " choices
@@ -93,7 +93,7 @@ elif [ "$choices" -eq 3 ]; then
   fi
 elif [ "$choices" -eq 4 ]; then
   sudo apt install -y sudo wget
-  wget "https://raw.githubusercontent.com/hawshemi/Linux-Optimizer/main/linux-optimizer.sh" -O linux-optimizer.sh && chmod +x linux-optimizer.sh && bash linux-optimizer.sh 
+  bash <(curl -Ls https://raw.githubusercontent.com/xmohammad1/ipv6local/main/Haproxy.sh)
 elif [ "$choices" -eq 5 ]; then
   bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
 else
