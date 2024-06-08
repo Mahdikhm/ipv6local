@@ -72,7 +72,7 @@ while true; do
     echo "3) Clear Configurations"
     echo "4) Remove HAProxy Completely"
     echo "9) Exit"
-    read -p "Select a Number [1-5]: " choice
+    read -p "Select a Number : " choice
 
     case $choice in
         1)
