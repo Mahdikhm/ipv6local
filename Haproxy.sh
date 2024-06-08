@@ -36,6 +36,7 @@ add_ip_and_ports() {
     generate_haproxy_config "${ports_array[*]}" "$target_ip"
 
     if haproxy -c -f $config_file; then
+        service haproxy start
         echo "Restarting HAProxy service..."
         service haproxy restart
         echo "HAProxy configuration updated and service restarted."
