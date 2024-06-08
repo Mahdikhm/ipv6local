@@ -2,15 +2,24 @@
 
 config_file="/etc/haproxy/haproxy.cfg"
 backup_file="/etc/haproxy/haproxy.cfg.bak"
+
+check_root() {
+    if [ "$EUID" -ne 0 ]; then
+        echo "Please run as root"
+        exit 1
+    fi
+}
+
 install_haproxy() {
     echo "Installing HAProxy..."
     sudo apt-get update
     sudo apt-get install -y haproxy
     echo "HAProxy installed."
-    defalut_config
+    default_config
 }
-defalut_config() {
-cat <<EOL > $config_file
+
+default_config() {
+    cat <<EOL > $config_file
 global
     log /dev/log    local0
     log /dev/log    local1 notice
@@ -48,9 +57,13 @@ defaults
     errorfile 504 /etc/haproxy/errors/504.http
 EOL
 }
+
 generate_haproxy_config() {
     local ports=($1)
     local target_ip=$2
+    local config_file="/etc/haproxy/haproxy.cfg"
+
+    echo "Generating HAProxy configuration..."
 
     for port in "${ports[@]}"; do
         cat <<EOL >> $config_file
@@ -64,18 +77,15 @@ backend backend_$port
 EOL
     done
 
-    echo "HAProxy configuration updated at $config_file"
+    echo "HAProxy configuration generated at $config_file"
 }
-
-add_ip_and_ports() {
+add_ip_port() {
     read -p "Enter the IP to forward to: " target_ip
     read -p "Enter the ports (use comma , to separate): " user_ports
-
     IFS=',' read -r -a ports_array <<< "$user_ports"
     generate_haproxy_config "${ports_array[*]}" "$target_ip"
 
-    if haproxy -c -f $config_file; then
-        service haproxy start
+    if haproxy -c -f /etc/haproxy/haproxy.cfg; then
         echo "Restarting HAProxy service..."
         service haproxy restart
         echo "HAProxy configuration updated and service restarted."
@@ -95,7 +105,6 @@ clear_configs() {
 
     echo "Clearing IP and port configurations from HAProxy configuration..."
 
-    # Use awk to remove the frontend and backend configurations
     awk '
     /^frontend frontend_/ {skip = 1}
     /^backend backend_/ {skip = 1}
@@ -106,7 +115,7 @@ clear_configs() {
     echo "Clearing IP and port configurations from $config_file."
     
     echo "Stopping HAProxy service..."
-    service haproxy stop
+    sudo service haproxy stop
     
     if [ $? -eq 0 ]; then
         echo "HAProxy service stopped."
@@ -117,13 +126,14 @@ clear_configs() {
     echo "Done!"
 }
 
-
 remove_haproxy() {
     echo "Removing HAProxy..."
     sudo apt-get remove --purge -y haproxy
     sudo apt-get autoremove -y
     echo "HAProxy removed."
 }
+
+check_root
 
 while true; do
     sleep 1.5
@@ -140,7 +150,7 @@ while true; do
             install_haproxy
             ;;
         2)
-            add_ip_and_ports
+            add_ip_port
             ;;
         3)
             clear_configs
