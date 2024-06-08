@@ -92,7 +92,6 @@ elif [ "$choices" -eq 3 ]; then
     reboot
   fi
 elif [ "$choices" -eq 4 ]; then
-  sudo apt install -y sudo wget
   bash <(curl -Ls https://raw.githubusercontent.com/xmohammad1/ipv6local/main/Haproxy.sh)
 elif [ "$choices" -eq 5 ]; then
   bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
