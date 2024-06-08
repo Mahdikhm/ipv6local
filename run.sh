@@ -7,12 +7,10 @@ fi
 
 # Function to display the menu
 show_menu() {
-  echo "1. Iran"
-  echo "2. Kharej"
-  echo "3. Uninstall"
-  echo "4. Haproxy"
-  echo "5. X-UI Sanai"
-  echo "6. Exit"
+  echo "1) Iran"
+  echo "2) Kharej"
+  echo "3) Uninstall"
+  echo "9) Exit"
 }
 
 while true; do
@@ -109,13 +107,7 @@ sysctl -p
         reboot
       fi
       ;;
-    4)
-      bash <(curl -Ls https://raw.githubusercontent.com/xmohammad1/ipv6local/main/Haproxy.sh)
-      ;;
-    5)
-      bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
-      ;;
-    6)
+    9)
       echo "Exiting..."
       exit 0
       ;;
