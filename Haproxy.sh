@@ -71,8 +71,8 @@ while true; do
     echo "2) Add IP and Ports to Forward"
     echo "3) Clear Configurations"
     echo "4) Remove HAProxy Completely"
-    echo "5) Exit"
-    read -p "Enter your choice [1-5]: " choice
+    echo "9) Exit"
+    read -p "Select a Number [1-5]: " choice
 
     case $choice in
         1)
@@ -87,7 +87,7 @@ while true; do
         4)
             remove_haproxy
             ;;
-        5)
+        9)
             echo "Exiting..."
             break
             ;;
