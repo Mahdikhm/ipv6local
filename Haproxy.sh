@@ -60,7 +60,7 @@ EOL
 
 generate_haproxy_config() {
     local ports=($1)
-    local target_ip=$2
+    local target_ips=($2)
     local config_file="/etc/haproxy/haproxy.cfg"
 
     echo "Generating HAProxy configuration..."
@@ -73,17 +73,29 @@ frontend frontend_$port
     default_backend backend_$port
 
 backend backend_$port
-    server server1 $target_ip:$port
 EOL
+        for i in "${!target_ips[@]}"; do
+            if [ $i -eq 0 ]; then
+                cat <<EOL >> $config_file
+    server server$(($i+1)) ${target_ips[$i]}:$port check
+EOL
+            else
+                cat <<EOL >> $config_file
+    server server$(($i+1)) ${target_ips[$i]}:$port check backup
+EOL
+            fi
+        done
     done
 
     echo "HAProxy configuration generated at $config_file"
 }
-add_ip_port() {
-    read -p "Enter the IP to forward to: " target_ip
+
+add_ip_ports() {
+    read -p "Enter the IPs to forward to (use comma , to separate multiple IPs): " user_ips
+    IFS=',' read -r -a ips_array <<< "$user_ips"
     read -p "Enter the ports (use comma , to separate): " user_ports
     IFS=',' read -r -a ports_array <<< "$user_ports"
-    generate_haproxy_config "${ports_array[*]}" "$target_ip"
+    generate_haproxy_config "${ports_array[*]}" "${ips_array[*]}"
 
     if haproxy -c -f /etc/haproxy/haproxy.cfg; then
         echo "Restarting HAProxy service..."
@@ -139,7 +151,7 @@ while true; do
     sleep 1.5
     echo "Select an option:"
     echo "1) Install HAProxy"
-    echo "2) Add IP and Ports to Forward"
+    echo "2) Add IPs and Ports to Forward"
     echo "3) Clear Configurations"
     echo "4) Remove HAProxy Completely"
     echo "9) Back"
@@ -150,7 +162,7 @@ while true; do
             install_haproxy
             ;;
         2)
-            add_ip_port
+            add_ip_ports
             ;;
         3)
             clear_configs
