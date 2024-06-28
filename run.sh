@@ -129,7 +129,7 @@ ip link set GRE_'"$interface"' up
         echo "$rctext" > /etc/rc.local
         chmod +x /etc/rc.local
         bash /etc/rc.local
-
+        ;;
     9)
       echo "Exiting..."
       exit 0
