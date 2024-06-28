@@ -120,7 +120,7 @@ sysctl -p
 
       cat << EOF > $script_path
 #!/bin/bash
-ip tunnel add GRE_$interface mode gre remote $ip_remote local $ipv4_address
+ip tunnel add GRE_$interface mode gre remote $ip_remote local $ipv4_address ttl 255
 ip addr add $pipv4/30 dev GRE_$interface
 ip link set GRE_$interface mtu 1436
 ip link set GRE_$interface up
