@@ -109,20 +109,30 @@ sysctl -p
       fi
       ;;
     4)
-        read -p "interface name: " interface
-        ipv4_address=$(curl -s https://api.ipify.org)
-        echo "Server IPv4 is : $ipv4_address"
-        read -p "Enter Remote Ip : " ip_remote
-        read -p "Private ipv4 (eg 172.16.1.1 )" pipv4
-        rctext='#!/bin/bash
-ip tunnel add GRE_'"$interface"' mode gre '"$ip_remote"' local '"$ipv4_address"'
-ip addr add '"$pipv4"'/30 dev GRE_'"$interface"'
-ip link set GRE_'"$interface"' mtu 1436
-ip link set GRE_'"$interface"' up
-'
-        echo "$rctext" > /etc/rc.local
-        chmod +x /etc/rc.local
-        bash /etc/rc.local
+read -p "Interface name: " interface
+ipv4_address=$(curl -s https://api.ipify.org)
+echo "Server IPv4 is: $ipv4_address"
+read -p "Enter Remote IP: " ip_remote
+read -p "Private IPv4 (e.g., 172.16.1.1): " pipv4
+
+# Create a separate script
+script_path="/usr/local/bin/setup_gre_tunnel.sh"
+
+cat << EOF > $script_path
+#!/bin/bash
+ip tunnel add GRE_$interface mode gre remote $ip_remote local $ipv4_address
+ip addr add $pipv4/30 dev GRE_$interface
+ip link set GRE_$interface mtu 1436
+ip link set GRE_$interface up
+EOF
+
+chmod +x $script_path
+sudo $script_path
+
+# Optionally, to make it persistent across reboots, add it to rc.local
+if ! grep -Fxq "$script_path" /etc/rc.local; then
+    sudo sed -i -e '$i \'"$script_path" /etc/rc.local
+fi
         ;;
     9)
       echo "Exiting..."
