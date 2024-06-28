@@ -110,12 +110,11 @@ sysctl -p
       ;;
     4)
         read -p "interface name: " interface
-        rctext='#!/bin/bash
         ipv4_address=$(curl -s https://api.ipify.org)
         echo "Server IPv4 is : $ipv4_address"
         read -p "Enter Remote Ip : " ip_remote
         read -p "Private ipv4 (eg 172.16.1.1 )" pipv4
-
+        rctext='#!/bin/bash
 ip tunnel add GRE_'"$interface"' mode gre '"$ip_remote"' local '"$ipv4_address"'
 ip addr add '"$pipv4"'/30 dev GRE_'"$interface"'
 ip link set GRE_'"$interface"' mtu 1436
