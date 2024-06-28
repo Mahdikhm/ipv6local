@@ -10,6 +10,7 @@ show_menu() {
   echo "1) Iran"
   echo "2) Kharej"
   echo "3) Uninstall"
+  echo "4) custome ips"
   echo "9) Back"
 }
 
@@ -107,6 +108,28 @@ sysctl -p
         reboot
       fi
       ;;
+    4)
+        read -p "interface name: " interface
+        rctext='#!/bin/bash
+        ipv4_address=$(curl -s https://api.ipify.org)
+        echo "Server IPv4 is : $ipv4_address"
+        read -p "Enter Remote Ip : " ip_remote
+        read -p "Private ipv6 (eg 2001:470:1f10:e1f::1 ): " pipv6
+        read -p "Private ipv4 (eg 172.16.1.1 )" pipv4
+ip tunnel add '"$interface"' mode sit remote '"$ip_remote"' local '"$ipv4_address"'
+ip -6 addr add '"$pipv6"'/64 dev 6to4tun_IR
+ip link set 6to4tun_IR mtu 1480
+ip link set 6to4tun_IR up
+# configure tunnel GRE6 or IPIPv6 IR
+ip -6 tunnel add GRE6Tun_IR mode ip6gre remote 2001:470:1f10:e1f::2 local 2001:470:1f10:e1f::1
+ip addr add '"$pipv4"'/30 dev GRE6Tun_IR
+ip link set GRE6Tun_IR mtu 1436
+ip link set GRE6Tun_IR up
+'
+        echo "$rctext" > /etc/rc.local
+        chmod +x /etc/rc.local
+        bash /etc/rc.local
+
     9)
       echo "Exiting..."
       exit 0
