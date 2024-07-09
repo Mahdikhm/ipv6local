@@ -21,8 +21,8 @@ install_haproxy() {
 default_config() {
     cat <<EOL > $config_file
 global
-    log /dev/log    local0
-    log /dev/log    local1 notice
+    # log /dev/log    local0
+    # log /dev/log    local1 notice
     chroot /var/lib/haproxy
     stats socket /run/haproxy/admin.sock mode 660 level admin
     stats timeout 30s
@@ -31,9 +31,9 @@ global
     daemon
 
 defaults
-    log     global
+    # log     global
     mode    tcp
-    option  tcplog
+    # option  tcplog
     option  dontlognull
     timeout connect 5000
     timeout client  50000
