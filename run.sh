@@ -67,7 +67,7 @@ ip -6 addr add fddc:41e5:6a78:b08d::2/64 dev 6to4tun_KH
 ip link set 6to4tun_KH mtu 1480
 ip link set 6to4tun_KH up
 
-ip -6 tunnel add GRE6Tun_KH mode ip6gre remote fddc:41e5:6a78:b08d::1 local fdef:ea2e:44b6::2
+ip -6 tunnel add GRE6Tun_KH mode ip6gre remote fddc:41e5:6a78:b08d::1 local fddc:41e5:6a78:b08d::2
 ip addr add 172.16.1.2/30 dev GRE6Tun_KH
 ip link set GRE6Tun_KH mtu 1436
 ip link set GRE6Tun_KH up
