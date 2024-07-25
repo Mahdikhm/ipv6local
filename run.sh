@@ -27,11 +27,11 @@ while true; do
       rctext='#!/bin/bash
 
 ip tunnel add 6to4tun_IR mode sit remote '"$ip_remote"' local '"$ipv4_address"'
-ip -6 addr add fdef:ea2e:44b6::1/64 dev 6to4tun_IR
+ip -6 addr add fddc:41e5:6a78:b08d::1/64 dev 6to4tun_IR
 ip link set 6to4tun_IR mtu 1480
 ip link set 6to4tun_IR up
 # configure tunnel GRE6 or IPIPv6 IR
-ip -6 tunnel add GRE6Tun_IR mode ip6gre remote fdef:ea2e:44b6::2 local fdef:ea2e:44b6::1
+ip -6 tunnel add GRE6Tun_IR mode ip6gre remote fddc:41e5:6a78:b08d::2 local fddc:41e5:6a78:b08d::1
 ip addr add 172.16.1.1/30 dev GRE6Tun_IR
 ip link set GRE6Tun_IR mtu 1436
 ip link set GRE6Tun_IR up
@@ -63,7 +63,7 @@ sysctl -p
       read -p "Enter Iran Ip : " ip_remote
       rctext='#!/bin/bash
 ip tunnel add 6to4tun_KH mode sit remote '"$ip_remote"' local '"$ipv4_address"'
-ip -6 addr add fdef:ea2e:44b6::2/64 dev 6to4tun_KH
+ip -6 addr add fddc:41e5:6a78:b08d::2/64 dev 6to4tun_KH
 ip link set 6to4tun_KH mtu 1480
 ip link set 6to4tun_KH up
 
@@ -91,8 +91,8 @@ sysctl -p
       chmod +x /etc/rc.local
       /etc/rc.local
       echo
-      echo "Local IPv6 Kharej: fdef:ea2e:44b6::2"
-      echo "Local Ipv6 Iran: fdef:ea2e:44b6::1"
+      echo "Local IPv6 Kharej: fddc:41e5:6a78:b08d::2"
+      echo "Local Ipv6 Iran: fddc:41e5:6a78:b08d::1"
       echo "Local IPv4 Kharej 172.16.1.2"
       echo "Local IPv4 Iran 172.16.1.1"
       ;;
